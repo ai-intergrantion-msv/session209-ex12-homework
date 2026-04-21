@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'com.restaurant'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.13.2'
+}
+
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    // 1. Servlet & JSP API (Giữ nguyên)
+    compileOnly('jakarta.servlet:jakarta.servlet-api:6.1.0')
+    implementation("jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1")
+    // 2. CẬP NHẬT JSTL: Cần cả API và Implementation
+    // JSTL API
+    implementation("jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2")
+    // JSTL Implementation (Glassfish) - Đây là chìa khóa để hết lỗi đỏ và có gợi ý code
+    implementation("org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1")
+    // 3. Spring MVC 7 (Nhớ chỉnh sourceCompatibility = '21' để tương thích)
+    implementation("org.springframework:spring-webmvc:7.0.6")
+    // 4. JUnit
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
