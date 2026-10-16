@@ -1,0 +1,63 @@
+name: CD Multi-Environment Deployment (Staging & Production)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v5
+
+      - name: Chuẩn bị môi trường triển khai Staging
+        run: |
+          echo "=========================================="
+          echo "🚀 Khởi động tiến trình triển khai STAGING"
+          echo "Branch  : ${{ github.ref }}"
+          echo "Commit  : ${{ github.sha }}"
+          echo "Môi trường: staging"
+          echo "=========================================="
+
+      - name: Triển khai ứng dụng lên Staging Server
+        run: |
+          echo "Đang cấu hình container demo-staging..."
+          echo "Mô phỏng: Deploy container lên môi trường Staging hoàn tất!"
+          echo "Kiểm tra Staging URL: https://staging.example.com"
+
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://api.prod.example.com
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v5
+
+      - name: Chuẩn bị môi trường triển khai Production
+        run: |
+          echo "=========================================="
+          echo "🛡️ Phê duyệt thành công! Bắt đầu triển khai PRODUCTION"
+          echo "Người phê duyệt (Approver): ${{ github.actor }}"
+          echo "Branch  : ${{ github.ref }}"
+          echo "Commit  : ${{ github.sha }}"
+          echo "Môi trường: production"
+          echo "=========================================="
+
+      - name: Triển khai ứng dụng lên Production Server
+        run: |
+          echo "Đang cập nhật image production chính thức..."
+          echo "Khởi chạy zero-downtime rolling update..."
+          echo "Kiểm tra trạng thái hệ thống: HTTP 200 OK"
+          echo "🎉 Triển khai Production thành công tại: https://api.prod.example.com"

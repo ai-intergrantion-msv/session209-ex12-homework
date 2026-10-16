@@ -1,0 +1,8 @@
+.git
+.github
+.gradle
+build
+!build/libs/*.jar
+homework
+*.log
+.DS_Store
